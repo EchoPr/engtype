@@ -1,0 +1,713 @@
+[
+ {
+  "taskType": "short-message",
+  "level": "A1",
+  "tags": [
+   "family"
+  ],
+  "prompt": "Write a short message to a new friend. Tell them your name, how old you are, where you live and what you like to do."
+ },
+ {
+  "taskType": "short-message",
+  "level": "A1",
+  "tags": [
+   "family"
+  ],
+  "prompt": "Write about your family. How many people are in your family? What are their names? What do they like?"
+ },
+ {
+  "taskType": "short-message",
+  "level": "A1",
+  "tags": [
+   "travel"
+  ],
+  "prompt": "You are on holiday. Write a postcard to a friend. Say where you are, what the weather is like and what you do every day."
+ },
+ {
+  "taskType": "short-message",
+  "level": "A1",
+  "tags": [
+   "health"
+  ],
+  "prompt": "Write about your favourite food. What is it? When do you eat it? Who makes it?"
+ },
+ {
+  "taskType": "short-message",
+  "level": "A1",
+  "tags": [
+   "general"
+  ],
+  "prompt": "Describe your bedroom. What is in it? What colour is it? Do you like it? Why?"
+ },
+ {
+  "taskType": "short-message",
+  "level": "A1",
+  "tags": [
+   "work"
+  ],
+  "prompt": "Write about a normal day for you. What time do you get up? What do you do in the morning, afternoon and evening?"
+ },
+ {
+  "taskType": "short-message",
+  "level": "A2",
+  "tags": [
+   "general"
+  ],
+  "prompt": "Your friend wants to visit you next weekend. Write a note to your friend. Say what you can do together, where you can meet and what time."
+ },
+ {
+  "taskType": "short-message",
+  "level": "A2",
+  "tags": [
+   "sport"
+  ],
+  "prompt": "Write to your English teacher about your free time. What do you do after school or work? Which hobby do you like most and why?"
+ },
+ {
+  "taskType": "email",
+  "level": "A2",
+  "tags": [
+   "travel"
+  ],
+  "prompt": "You went on a trip last weekend. Write an email to your friend. Say where you went, who you went with and what you did there."
+ },
+ {
+  "taskType": "email",
+  "level": "A2",
+  "tags": [
+   "work"
+  ],
+  "prompt": "You cannot go to your English class tomorrow. Write an email to your teacher. Say sorry, explain why you cannot come and ask what homework you need to do."
+ },
+ {
+  "taskType": "email",
+  "level": "A2",
+  "tags": [
+   "culture"
+  ],
+  "prompt": "Write an email to a friend about a film you saw recently. What was it about? Who was in it? Would you recommend it?"
+ },
+ {
+  "taskType": "email",
+  "level": "B1",
+  "tags": [
+   "travel",
+   "culture"
+  ],
+  "prompt": "An English-speaking friend is coming to your country for the first time. Write an email giving advice about what to see, what to eat and what to be careful about."
+ },
+ {
+  "taskType": "email",
+  "level": "B1",
+  "tags": [
+   "education"
+  ],
+  "prompt": "You have just finished a course (for example cooking, dancing or programming). Write an email to a friend describing the course, what you learned and whether you would recommend it."
+ },
+ {
+  "taskType": "story",
+  "level": "B1",
+  "tags": [
+   "general"
+  ],
+  "prompt": "Write a story that begins with this sentence: 'When I opened the door, I couldn't believe what I saw.'"
+ },
+ {
+  "taskType": "story",
+  "level": "B1",
+  "tags": [
+   "travel"
+  ],
+  "prompt": "Write a story that ends with this sentence: 'And that is why I will never travel without a map again.'"
+ },
+ {
+  "taskType": "story",
+  "level": "B2",
+  "tags": [
+   "technology"
+  ],
+  "prompt": "Write a story about a day when all the phones and computers in your city suddenly stopped working."
+ },
+ {
+  "taskType": "opinion-paragraph",
+  "level": "A2",
+  "tags": [
+   "education"
+  ],
+  "prompt": "Is it better to study in the morning or in the evening? Give your opinion and one or two reasons."
+ },
+ {
+  "taskType": "opinion-paragraph",
+  "level": "A2",
+  "tags": [
+   "family",
+   "health"
+  ],
+  "prompt": "Some people like living in a big city. Other people like living in a village. Which do you prefer and why?"
+ },
+ {
+  "taskType": "opinion-paragraph",
+  "level": "B1",
+  "tags": [
+   "technology",
+   "family"
+  ],
+  "prompt": "Should children under 12 have their own smartphone? Give your opinion with reasons and examples."
+ },
+ {
+  "taskType": "opinion-paragraph",
+  "level": "B1",
+  "tags": [
+   "health"
+  ],
+  "prompt": "Some people say that everyone should do sport every day. Do you agree? Explain your opinion with examples from your own life."
+ },
+ {
+  "taskType": "opinion-paragraph",
+  "level": "B1",
+  "tags": [
+   "environment"
+  ],
+  "prompt": "What can ordinary people do every day to protect the environment? Suggest some ideas and explain why they are useful."
+ },
+ {
+  "taskType": "ielts-gt-letter",
+  "level": "B1",
+  "tags": [
+   "travel"
+  ],
+  "prompt": "You recently stayed at a hotel and left a personal item in your room. Write a letter to the hotel manager. In your letter: say when you stayed at the hotel; describe the item you left; explain what you would like the manager to do."
+ },
+ {
+  "taskType": "ielts-gt-letter",
+  "level": "B1",
+  "tags": [
+   "family"
+  ],
+  "prompt": "A friend has invited you to their wedding but you cannot attend. Write a letter to your friend. In your letter: thank them for the invitation; explain why you cannot attend; suggest another time you could meet."
+ },
+ {
+  "taskType": "ielts-gt-letter",
+  "level": "B2",
+  "tags": [
+   "work"
+  ],
+  "prompt": "You have seen an advertisement for a part-time job at a local museum. Write a letter to the museum manager. In your letter: explain which job you are interested in; describe your relevant experience; say when you are available for an interview."
+ },
+ {
+  "taskType": "ielts-gt-letter",
+  "level": "B2",
+  "tags": [
+   "society"
+  ],
+  "prompt": "There has been a lot of noise recently from a construction site near your home. Write a letter to your local council. In your letter: describe the problem; explain how it is affecting you; suggest what the council should do."
+ },
+ {
+  "taskType": "ielts-gt-letter",
+  "level": "B2",
+  "tags": [
+   "education"
+  ],
+  "prompt": "You are taking an evening course at a college but you are not satisfied with it. Write a letter to the course director. In your letter: give details of the course; explain what the problems are; say what you would like the college to do."
+ },
+ {
+  "taskType": "ielts-gt-letter",
+  "level": "C1",
+  "tags": [
+   "work",
+   "economy"
+  ],
+  "prompt": "Your company is considering allowing employees to work from home two days a week. Your manager has asked for your opinion. Write a letter to your manager. In your letter: give your opinion on the proposal; explain the possible benefits and drawbacks; suggest how the arrangement could be organised."
+ },
+ {
+  "taskType": "ielts-gt-letter",
+  "level": "C1",
+  "tags": [
+   "environment",
+   "society"
+  ],
+  "prompt": "Your town is planning to turn a public park into a shopping centre. Write a letter to the editor of a local newspaper. In your letter: explain why the park is important to the community; describe the likely effects of the plan; propose an alternative."
+ },
+ {
+  "taskType": "toefl-discussion",
+  "level": "B1",
+  "tags": [
+   "education"
+  ],
+  "prompt": "Professor: This week we are talking about learning habits. Some students prefer to study alone, while others prefer to study in groups. Which do you think is more effective, and why?\n\nAnna: I study better alone. In a group, people talk about other things and I lose a lot of time.\n\nMarco: Groups help me a lot. When I explain something to other people, I understand it better myself."
+ },
+ {
+  "taskType": "toefl-discussion",
+  "level": "B2",
+  "tags": [
+   "technology",
+   "education"
+  ],
+  "prompt": "Professor: Many universities now record lectures and put them online. Some people think this is excellent because students can watch lectures again whenever they want. Others worry that students will stop coming to class. What is your opinion? Should universities record all lectures?\n\nKelly: I think recording lectures is a great idea. Sometimes I miss details, and being able to rewatch helps me prepare for exams.\n\nAndrew: I disagree. If everything is online, students will procrastinate and the classroom discussion, which is the most valuable part, will disappear."
+ },
+ {
+  "taskType": "toefl-discussion",
+  "level": "B2",
+  "tags": [
+   "environment",
+   "society"
+  ],
+  "prompt": "Professor: Cities around the world are trying to reduce car traffic. One proposal is to make public transport completely free. Do you think free public transport is a good policy for reducing traffic? Why or why not?\n\nYuki: Yes. If buses and trains are free, many people will leave their cars at home, and the air will be cleaner.\n\nDaniel: I'm not sure. People use cars because they are convenient, not because buses are expensive. The money would be better spent on improving the service."
+ },
+ {
+  "taskType": "toefl-discussion",
+  "level": "C1",
+  "tags": [
+   "work",
+   "economy"
+  ],
+  "prompt": "Professor: Some economists argue that a four-day working week would increase productivity and wellbeing without reducing output. Others believe it would be impractical for many industries. Do you think governments should encourage a four-day working week? Explain your view.\n\nPriya: Trials in several countries showed employees were happier and just as productive. Governments should support this through tax incentives.\n\nLeon: That works for office jobs, but hospitals, shops and factories cannot simply close for a day. A national policy would create more problems than it solves."
+ },
+ {
+  "taskType": "toefl-discussion",
+  "level": "C1",
+  "tags": [
+   "technology",
+   "society"
+  ],
+  "prompt": "Professor: Artificial intelligence tools can now write essays, create images and compose music. Some people think these tools will make human creativity more valuable; others believe they will reduce it. What do you think, and why?\n\nSofia: I think AI will push people to be more original, because anything generic can now be produced by a machine.\n\nTom: I worry that young people will rely on these tools and never develop their own creative skills."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "B2",
+  "tags": [
+   "education",
+   "technology"
+  ],
+  "prompt": "Some people think that children should learn to use computers at primary school, while others believe they should focus on traditional skills such as handwriting and arithmetic. Discuss both views and give your own opinion.",
+  "questionType": "discuss-both-views"
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C1",
+  "tags": [
+   "society",
+   "economy"
+  ],
+  "prompt": "In many countries, the gap between the rich and the poor is increasing. What problems does this cause, and what measures could governments take to reduce it?",
+  "questionType": "problem-solution"
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C2",
+  "tags": [
+   "technology",
+   "society"
+  ],
+  "prompt": "Some argue that the widespread use of algorithms to personalise news and entertainment narrows people's understanding of the world, while others claim it simply gives people what they want. To what extent is algorithmic personalisation a threat to public discourse?",
+  "questionType": "opinion"
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C2",
+  "tags": [
+   "culture",
+   "society"
+  ],
+  "prompt": "It has been suggested that globalisation inevitably erodes local cultures, while others contend that it enables them to reach a wider audience and be revitalised. Evaluate both positions and reach a reasoned conclusion.",
+  "questionType": "discuss-both-views"
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C2",
+  "tags": [
+   "environment",
+   "economy"
+  ],
+  "prompt": "Some economists maintain that continuous economic growth is incompatible with environmental sustainability. Others believe technological innovation will allow growth and conservation to coexist. Discuss both views and give your own opinion.",
+  "questionType": "discuss-both-views"
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "B2",
+  "questionType": "opinion",
+  "tags": [
+   "education"
+  ],
+  "prompt": "Some people believe that homework should be banned in primary schools. To what extent do you agree or disagree?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "B2",
+  "questionType": "opinion",
+  "tags": [
+   "technology",
+   "family"
+  ],
+  "prompt": "Children today spend too much time on screens, and parents should strictly limit it. To what extent do you agree or disagree?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "B2",
+  "questionType": "opinion",
+  "tags": [
+   "work"
+  ],
+  "prompt": "Employees who work from home are more productive than those who work in an office. To what extent do you agree or disagree?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C1",
+  "questionType": "opinion",
+  "tags": [
+   "society",
+   "economy"
+  ],
+  "prompt": "Governments should tax unhealthy food in the same way they tax cigarettes and alcohol. To what extent do you agree or disagree?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C1",
+  "questionType": "opinion",
+  "tags": [
+   "culture",
+   "travel"
+  ],
+  "prompt": "International tourism does more harm than good to local cultures. To what extent do you agree or disagree?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C1",
+  "questionType": "opinion",
+  "tags": [
+   "education",
+   "economy"
+  ],
+  "prompt": "University education should be free for all students. To what extent do you agree or disagree?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C2",
+  "questionType": "opinion",
+  "tags": [
+   "technology",
+   "society"
+  ],
+  "prompt": "It is the responsibility of technology companies, not individuals, to prevent the spread of false information online. To what extent do you agree or disagree?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C2",
+  "questionType": "opinion",
+  "tags": [
+   "environment",
+   "economy"
+  ],
+  "prompt": "Individual action is meaningless in the fight against climate change; only governments and large corporations can make a difference. To what extent do you agree or disagree?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "B2",
+  "questionType": "discuss-both-views",
+  "tags": [
+   "work",
+   "family"
+  ],
+  "prompt": "Some people think it is better to work for a large company, while others prefer to work for a small business. Discuss both views and give your own opinion.\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "B2",
+  "questionType": "discuss-both-views",
+  "tags": [
+   "health",
+   "education"
+  ],
+  "prompt": "Some people say that sport should be a compulsory subject at school, while others think students should choose whether to do it. Discuss both views and give your own opinion.\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C1",
+  "questionType": "discuss-both-views",
+  "tags": [
+   "media",
+   "culture"
+  ],
+  "prompt": "Some people believe that museums and galleries should be free to visit, while others argue that visitors should pay to support them. Discuss both views and give your own opinion.\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C1",
+  "questionType": "discuss-both-views",
+  "tags": [
+   "society",
+   "family"
+  ],
+  "prompt": "Some argue that elderly people are best cared for by their families, while others believe this is the job of the state. Discuss both views and give your own opinion.\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C1",
+  "questionType": "discuss-both-views",
+  "tags": [
+   "technology",
+   "work"
+  ],
+  "prompt": "Some people think artificial intelligence will create more jobs than it destroys, while others fear mass unemployment. Discuss both views and give your own opinion.\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C2",
+  "questionType": "discuss-both-views",
+  "tags": [
+   "culture",
+   "education"
+  ],
+  "prompt": "Some believe that the arts should receive the same public funding as science, while others think science should always come first. Discuss both views and give your own opinion.\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "B2",
+  "questionType": "advantages-outweigh",
+  "tags": [
+   "travel",
+   "work"
+  ],
+  "prompt": "More and more young people take a gap year to travel or work before starting university. Do the advantages of this outweigh the disadvantages?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "B2",
+  "questionType": "advantages-outweigh",
+  "tags": [
+   "technology",
+   "education"
+  ],
+  "prompt": "Many students now take courses online instead of attending classes in person. Do the advantages of this development outweigh the disadvantages?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C1",
+  "questionType": "advantages-outweigh",
+  "tags": [
+   "economy",
+   "society"
+  ],
+  "prompt": "In many cities, people now rent everything from cars to clothes instead of buying them. Do the advantages of this trend outweigh the disadvantages?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C1",
+  "questionType": "advantages-outweigh",
+  "tags": [
+   "work",
+   "society"
+  ],
+  "prompt": "Some companies are introducing a four-day working week. Do the advantages of this outweigh the disadvantages?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C2",
+  "questionType": "advantages-outweigh",
+  "tags": [
+   "technology",
+   "health"
+  ],
+  "prompt": "Wearable devices now collect detailed data about people's health and daily activity. Do the benefits of this outweigh the risks?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "B2",
+  "questionType": "advantages-disadvantages",
+  "tags": [
+   "family",
+   "economy"
+  ],
+  "prompt": "In many countries, young adults continue to live with their parents until their thirties. What are the advantages and disadvantages of this?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C1",
+  "questionType": "advantages-disadvantages",
+  "tags": [
+   "travel",
+   "environment"
+  ],
+  "prompt": "Some cities have banned private cars from their centres. What are the advantages and disadvantages of this policy?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "B2",
+  "questionType": "problem-solution",
+  "tags": [
+   "health",
+   "society"
+  ],
+  "prompt": "In many countries, the number of people who are overweight is increasing. What are the causes of this problem, and what solutions can you suggest?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "B2",
+  "questionType": "problem-solution",
+  "tags": [
+   "environment",
+   "society"
+  ],
+  "prompt": "Large amounts of food are wasted every day in homes, shops and restaurants. Why does this happen, and what can be done to reduce it?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C1",
+  "questionType": "problem-solution",
+  "tags": [
+   "society",
+   "travel"
+  ],
+  "prompt": "Housing in many big cities has become too expensive for young people. What are the causes of this, and what measures could be taken to solve it?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C1",
+  "questionType": "problem-solution",
+  "tags": [
+   "technology",
+   "family"
+  ],
+  "prompt": "Many people find it difficult to concentrate because of constant notifications from their phones. What problems does this cause, and how can they be solved?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C2",
+  "questionType": "problem-solution",
+  "tags": [
+   "society",
+   "culture"
+  ],
+  "prompt": "In many rural areas, young people are leaving for the cities and villages are slowly disappearing. What are the consequences of this, and what could be done to reverse the trend?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "B2",
+  "questionType": "two-part",
+  "tags": [
+   "education",
+   "work"
+  ],
+  "prompt": "Many people change careers several times during their lives. Why do people do this? Is it a positive or negative development?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "B2",
+  "questionType": "two-part",
+  "tags": [
+   "media",
+   "family"
+  ],
+  "prompt": "Children today often know more about technology than their parents. Why is this the case? What effect does it have on family relationships?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C1",
+  "questionType": "two-part",
+  "tags": [
+   "culture",
+   "society"
+  ],
+  "prompt": "Many traditional crafts are no longer practised. Why is this happening? Should anything be done to preserve them?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C1",
+  "questionType": "two-part",
+  "tags": [
+   "media",
+   "society"
+  ],
+  "prompt": "People increasingly get their news from social media rather than from newspapers or television. Why is this? What problems might this cause?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C2",
+  "questionType": "two-part",
+  "tags": [
+   "economy",
+   "society"
+  ],
+  "prompt": "In some countries, a small number of people own a large share of the national wealth. Why has this happened? What effects does it have on society as a whole?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "B2",
+  "questionType": "positive-negative",
+  "tags": [
+   "travel",
+   "culture"
+  ],
+  "prompt": "More people than ever now choose to live and work in a foreign country. Is this a positive or negative development?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C1",
+  "questionType": "positive-negative",
+  "tags": [
+   "technology",
+   "society"
+  ],
+  "prompt": "In many shops and restaurants, people can no longer pay with cash. Is this a positive or negative development?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "ielts-task2",
+  "level": "C1",
+  "questionType": "positive-negative",
+  "tags": [
+   "health",
+   "work"
+  ],
+  "prompt": "Many workers now spend most of the day sitting at a desk. Is this a positive or negative development for society?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience."
+ },
+ {
+  "taskType": "toefl-email",
+  "level": "B1",
+  "tags": [
+   "education"
+  ],
+  "prompt": "You recently joined a university photography club, but the meeting times have changed and you can no longer attend.\n\nWrite an email to the club organiser, Ms. Lee. In your email, do the following:\n- Explain why you joined the club.\n- Describe the problem with the new meeting times.\n- Suggest a solution.\n\nWrite as much as you can and in complete sentences."
+ },
+ {
+  "taskType": "toefl-email",
+  "level": "B1",
+  "tags": [
+   "travel"
+  ],
+  "prompt": "You ordered a book online for your course. The book arrived damaged and two weeks late.\n\nWrite an email to the customer service team. In your email, do the following:\n- Describe what you ordered and when.\n- Explain what was wrong with the delivery.\n- Say what you would like the company to do.\n\nWrite as much as you can and in complete sentences."
+ },
+ {
+  "taskType": "toefl-email",
+  "level": "B2",
+  "tags": [
+   "education",
+   "work"
+  ],
+  "prompt": "Your professor, Dr. Patel, has offered you a place on a summer research project, but it overlaps with an internship you have already accepted.\n\nWrite an email to Dr. Patel. In your email, do the following:\n- Thank Dr. Patel for the offer.\n- Explain the situation with the internship.\n- Ask whether there is another way you could take part.\n\nWrite as much as you can and in complete sentences."
+ },
+ {
+  "taskType": "toefl-email",
+  "level": "B2",
+  "tags": [
+   "society"
+  ],
+  "prompt": "The student newspaper published an article about plans to close the library on weekends. You disagree with the plan.\n\nWrite an email to the editor of the newspaper. In your email, do the following:\n- Say what you thought of the article.\n- Explain how the change would affect students.\n- Propose an alternative to closing the library.\n\nWrite as much as you can and in complete sentences."
+ },
+ {
+  "taskType": "toefl-email",
+  "level": "B2",
+  "tags": [
+   "culture"
+  ],
+  "prompt": "You subscribe to a monthly science magazine. Recently, the magazine has started printing fewer articles and more advertisements.\n\nWrite an email to the magazine's editor. In your email, do the following:\n- Say what you have liked about the magazine.\n- Describe the problem.\n- Ask what the magazine plans to do about it.\n\nWrite as much as you can and in complete sentences."
+ },
+ {
+  "taskType": "toefl-email",
+  "level": "C1",
+  "tags": [
+   "work",
+   "education"
+  ],
+  "prompt": "You organised a group project for your class, but one team member has not contributed for several weeks and the deadline is close.\n\nWrite an email to your instructor, Professor Gómez. In your email, do the following:\n- Describe the project and its progress.\n- Explain the problem with the team member, tactfully.\n- Ask for advice or an extension.\n\nWrite as much as you can and in complete sentences."
+ }
+]

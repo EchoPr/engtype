@@ -1,0 +1,3 @@
+# Each Exam keeps its own Scale
+
+Assessments are reported on the Exam's native Scale: IELTS Bands 0–9 per Criterion, TOEFL task Scores 0–5 (section 1–6), never a shared "band" across Exams. The official standards differ in shape, not just in range — IELTS scores four analytic Criteria and caps Bands via bolded negative features, while TOEFL's Email and Academic Discussion tasks are scored holistically 0–5 (see `docs/research/ielts-writing.md`, `docs/research/toefl-writing.md`) — so a common scale would either lose information or invent conversions no exam publishes. Cross-exam comparison goes through Level (CEFR) instead, using each Exam's official CEFR mapping.

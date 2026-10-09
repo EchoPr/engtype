@@ -1,0 +1,3 @@
+# Rubrics are written in our own words
+
+The Rubric data that drives Assessment and is shown to Learners paraphrases the official standards and links to them; it never reproduces the IELTS band descriptors or TOEFL rubrics verbatim. The IELTS Partners allow their published material for personal, non-commercial use only, and ETS licenses its writing rubrics commercially and forbids posting TOEFL materials on third-party sites (see `docs/research/data-and-licensing.md`). Paraphrase also suits the model better: we restate each Descriptor as observable checks and spell out what separates adjacent Bands, which the official wording leaves to trained examiners. Criterion names, Scale ranges and Task Type names are facts and are stated as-is.

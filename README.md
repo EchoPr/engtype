@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# engtype
 
-## Getting Started
+Минималистичный тренажёр английского письма в стиле monkeytype. Задания в формате IELTS / TOEFL / Cambridge под уровень A1–C2, разбор ошибок в два уровня, чат по своей работе, профиль со статистикой как на GitHub.
 
-First, run the development server:
+Стек: Next.js 16 (App Router, server actions) · shadcn/ui (Base UI) · Tailwind 4 · SQLite через встроенный `node:sqlite` · OpenAI SDK (Chat Completions, работает с любым OpenAI-совместимым API).
+
+## Запуск
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+pnpm dev            # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Нужен Node 22.5+ (используется `node:sqlite`). Зарегистрируйся, открой **settings**, выбери провайдера (**OpenAI**, **DeepSeek** или **custom** — любой OpenAI-совместимый URL) и вставь ключ — он хранится в базе в зашифрованном виде (AES-256-GCM). Можно вместо этого положить `OPENAI_API_KEY` в `.env` (см. `.env.example`), тогда он используется для всех пользователей. Модели по умолчанию: `gpt-5.5` для OpenAI, `deepseek-v4-pro` и `deepseek-v4-flash` (для проверок) для DeepSeek. Кнопка «test saved key» подгружает список моделей, доступных ключу.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+У OpenAI структурированные ответы идут через строгую JSON Schema. У DeepSeek и custom — через JSON mode: схема передаётся в промпте, ответ проверяется zod, при несовпадении делается один повторный запрос с текстом ошибки. Там, где нет эндпоинта moderation, его заменяет LLM-классификатор безопасности на fast-модели.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Без ключа работает банк заданий и редактор, но не AI-генерация, разбор и чат.
 
-## Learn More
+Все данные (пользователи, задания, черновики, работы, разборы, чат) лежат в `data/app.db` и сохраняются между запусками. Черновик автосохраняется каждые ~1.2 с.
 
-To learn more about Next.js, take a look at the following resources:
+## Как устроено
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Задания** (`src/lib/tasks.ts`)
+- Банк в `data/bank/curated.json`: только наши собственные задания — IELTS Task 2 по официальным типам вопросов, письма IELTS GT, TOEFL Write an Email и Academic Discussion, а также общие форматы A1–B1. Почему не используем скачанные датасеты, см. `docs/adr/0003-anchor-data-sources.md`. Устаревший формат TOEFL Independent больше не выдаётся.
+- Режим **exam bank** выдаёт готовое задание из банка. Режим **ai** — облегчённый RAG: BM25 по банку с учётом формата, уровня и темы выбирает 4 похожих задания, они идут в промпт как образцы стиля, и модель генерирует новое задание (structured output: текст, советы, полезная лексика). Недавние задания пользователя исключаются, чтобы темы не повторялись.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Разбор** (`src/lib/analyze.ts`): два параллельных вызова модели в фоне (`after()`), страница опрашивает статус.
+1. *Inline (уровень 1)*: орфография, грамматика, пунктуация, выбор слов, коллокации, стиль. Каждая ошибка привязана к точной цитате, на сервере цитата переводится в смещения в тексте. В орфографических ошибках неверные буквы подчёркиваются по побуквенному diff, остальные проблемы — волной (ошибка) или пунктиром (можно лучше). При наведении видно исправление и объяснение.
+2. *Review (уровень 2, боковая панель)*: band 0–9 по четырём критериям IELTS, CEFR, соответствие целевому уровню, смысловые и структурные проблемы (клик подсвечивает фрагмент в тексте), рекомендации, улучшенные предложения, лексика. Оценка сейчас переделывается под официальные стандарты экзаменов, см. раздел «Как мы работаем» в `AGENTS.md` и `docs/research/`.
+3. *Stats* считаются локально (`src/lib/metrics.ts`): слова, предложения, лексическое разнообразие (MTLD-подобный TTR), средняя длина предложения, связки, Flesch, wpm, самые частые слова.
 
-## Deploy on Vercel
+**Чат и guardrails** (`src/lib/guardrails.ts`, `src/lib/chat.ts`). Каждый вопрос проходит через:
+1. локальные проверки: длина, паттерны prompt injection («ignore previous instructions», «system prompt», jailbreak…), утечка ключей `sk-…`;
+2. moderation: `omni-moderation-latest` у OpenAI, у остальных провайдеров LLM-классификатор безопасности;
+3. классификатор темы на fast-модели: пропускаются только вопросы про эту работу и английское письмо, всё остальное (рецепты, код, общие вопросы) отклоняется;
+4. жёсткий системный промпт: эссе, задание и фидбек передаются как недоверенные данные;
+5. проверку ответа: moderation, canary-маркер против утечки системного промпта, поиск ключей;
+6. rate limit: 8 вопросов в минуту, 200 в день.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Отклонённые сообщения сохраняются с причиной и показываются в чате красным. Текст эссе тоже проходит moderation перед анализом. Пользовательская тема для генерации проверяется теми же локальными фильтрами и moderation.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Профиль**
+- `/profile` — приватный: heatmap активности за год, стрики, слова/минуты, средний и лучший band с трендом, средние по критериям, распределение по уровням, разбивка ошибок по типам и на 100 слов, история всех работ.
+- `/u/<username>` — публичный: что показывать, настраивается в settings (профиль, heatmap, баллы). Статистика ошибок всегда приватная. Каждую работу можно сделать публичной или приватной; публичные работы открываются по ссылке `/w/<id>`, но без чата.
+
+## Структура
+
+```
+data/bank/            банк заданий (в git)
+docs/research/        ресёрч стандартов экзаменов с источниками
+docs/adr/             архитектурные решения
+CONTEXT.md            глоссарий предметной области
+data/app.db           база SQLite (не в git)
+src/lib/              db, auth, ai, tasks, analyze, guardrails, chat, metrics, stats
+src/app/              страницы и server actions (actions.ts)
+src/components/       writer, result-view, annotated-essay, review/chat panels, profile
+```

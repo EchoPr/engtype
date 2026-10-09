@@ -1,0 +1,3 @@
+# The server pays for one cheap model; learners do not bring their own API key
+
+All model calls use a single provider, key and model configured on the server (`AI_*` env vars, DeepSeek V4 Flash by default), and access is rationed per Plan by Quota instead of by each learner's own API key. Bring-your-own-key put a technical hurdle in front of every new learner and made Plans impossible; at roughly $0.0035 per Full Review the cost is small, so the real risks are abuse (scripted or multi-account use, hence per-IP and global daily caps) and the gap between Free and Pro. Previously stored learner keys are deleted rather than kept unused.
