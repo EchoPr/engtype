@@ -50,16 +50,13 @@ export async function login(_: FormState, form: FormData): Promise<FormState> {
   const username = String(form.get("username") ?? "").trim().slice(0, 64);
   const password = String(form.get("password") ?? "");
   const ip = await clientIp();
-  const blocked = authLimit.loginBlocked(ip, username);
+  const blocked = authLimit.startLogin(ip, username);
   if (blocked) return { error: `Too many failed attempts. Try again in ${inHours(blocked.retryAt, now())}.` };
   const row = db.prepare("SELECT id, password_hash FROM users WHERE username = ?").get(username) as
     | { id: number; password_hash: string }
     | undefined;
-  if (!row || !(await verifyPassword(password, row.password_hash))) {
-    authLimit.recordLoginFailure(ip, username);
-    return { error: "Wrong username or password" };
-  }
-  authLimit.loginSucceeded(username);
+  if (!row || !(await verifyPassword(password, row.password_hash))) return { error: "Wrong username or password" };
+  authLimit.loginSucceeded(ip, username);
   authLimit.prune();
   await createSession(row.id);
   redirect("/write");
@@ -81,6 +78,8 @@ export async function newTask(input: { taskType: string; level: string; topic?: 
   const user = await requireUser();
   if (!isLevel(input.level) || !isTaskType(input.taskType) || "retired" in TASK_TYPES[input.taskType])
     return { error: "Invalid level or task type" };
+  // action arguments come straight from the client: anything but "bank" would generate with the model
+  if (input.source !== "ai" && input.source !== "bank") return { error: "Invalid task source" };
   if (input.source === "ai") {
     const d = quota.consume(user, "task", { ip: await clientIp() });
     if (!d.ok) return { error: `${quotaMessage("AI tasks", d)} Exam bank tasks are always available.` };
@@ -127,8 +126,9 @@ export async function submitEssay(taskId: number, text: string, seconds: number)
 }
 
 /**
- * Retrying a failed analysis is free (the failure was ours); re-analysing a finished one spends a review,
- * otherwise it would bypass the Quota. That review may come back as a Quick Check.
+ * Retrying a failed analysis is free a couple of times (the failure was probably ours); after that, and for
+ * re-analysing a finished one, it spends a review, otherwise a Response built to fail would loop for free.
+ * That review may come back as a Quick Check.
  */
 export async function reanalyze(submissionId: number) {
   const user = await requireUser();
@@ -136,7 +136,7 @@ export async function reanalyze(submissionId: number) {
     | { status: string }
     | undefined;
   if (!sub || sub.status === "pending") return {};
-  if (sub.status !== "error") {
+  if (!(sub.status === "error" && quota.freeRetry(user, submissionId))) {
     const d = quota.consumeReview(user, await clientIp());
     if (!d.ok) return { error: quotaMessage("reviews", d) };
     db.prepare("UPDATE submissions SET mode = ? WHERE id = ?").run(d.mode, submissionId);

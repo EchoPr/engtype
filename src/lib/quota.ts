@@ -11,7 +11,10 @@ export type Plans = Record<PlanName, PlanLimits>;
 /** Anti-abuse caps that apply across accounts. */
 export type AbuseCaps = { fullPerIp: number; quickPerIp: number; globalFull: number; globalQuick: number };
 
-type Action = "full" | "quick" | "task" | "chat";
+type Action = "full" | "quick" | "task" | "chat" | "retry";
+
+/** Free retries of a failed Response; after that a retry spends a review like any re-analysis. */
+export const FREE_RETRIES = 2;
 type Learner = { id: number; plan: PlanName };
 
 export type Decision = { ok: true } | { ok: false; reason: "quota" | "ip" | "global"; retryAt: number | null };
@@ -102,6 +105,14 @@ export function createQuota(deps: { db: DatabaseSync; plans: Plans; abuse: Abuse
         return { used: used.n, limit, left: Math.max(0, limit - used.n), nextAt: used.n >= limit ? nextAt(used.oldest) : null };
       };
       return { plan: learner.plan, full: one("full"), quick: one("quick"), task: one("task") };
+    },
+
+    /** Spends a free retry of a failed Response if one is left. */
+    freeRetry(learner: Learner, ref: number): boolean {
+      const { n } = db.prepare("SELECT COUNT(*) AS n FROM usage WHERE user_id = ? AND action = 'retry' AND ref = ?").get(learner.id, ref) as { n: number };
+      if (n >= FREE_RETRIES) return false;
+      record(learner.id, "retry", undefined, ref);
+      return true;
     },
 
     chatLeft(learner: Learner, ref: number) {

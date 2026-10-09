@@ -92,3 +92,12 @@ describe("status", () => {
     expect(quota.chatLeft(free(1), 11)).toBe(2);
   });
 });
+
+describe("free retries", () => {
+  it("allows a couple of free retries of a failed Response, each Response on its own", () => {
+    expect(quota.freeRetry(free(1), 10)).toBe(true);
+    expect(quota.freeRetry(free(1), 10)).toBe(true);
+    expect(quota.freeRetry(free(1), 10)).toBe(false);
+    expect(quota.freeRetry(free(1), 11)).toBe(true);
+  });
+});

@@ -12,7 +12,7 @@ const TTL = 60 * 60 * 24 * 30;
 
 export const authLimit = createAuthLimit({
   db,
-  limits: { registerPerIp: 5, loginFailuresPerUser: 10, loginFailuresPerIp: 30, loginWindow: 15 * 60 },
+  limits: { registerPerIp: 5, loginFailuresPerPair: 10, loginFailuresPerIp: 30, loginFailuresPerUser: 100, loginWindow: 15 * 60 },
   now,
 });
 

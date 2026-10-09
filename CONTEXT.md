@@ -92,7 +92,7 @@ A cheap estimate of a Response: its Level and overall Band or Score, without Inl
 _Avoid_: lite review, free review
 
 **Quota**:
-How many Full Reviews, Quick Checks, generated Tasks and chat questions a Plan allows within a rolling 24 hours (chat: per Response).
+How many Full Reviews, Quick Checks, generated Tasks and chat questions a Plan allows within a rolling 24 hours (chat: per Response). A Response whose analysis failed gets two free retries; further retries spend a review.
 _Avoid_: limit (too generic), credits
 
 ## Learners

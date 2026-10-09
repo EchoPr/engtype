@@ -2,10 +2,18 @@ import type { DatabaseSync } from "node:sqlite";
 
 /**
  * Anti-abuse limits on sign-up and sign-in: accounts created per IP a day (each new account brings a fresh
- * Free Quota), and failed passwords per username and per IP within a short window (password guessing).
+ * Free Quota), and password guesses within a short window. Guesses are counted per (username, IP) pair so a
+ * stranger cannot lock the owner out, per IP against sweeping many usernames, and per username with a higher
+ * cap against one account being guessed from many IPs.
  */
 
-export type AuthLimits = { registerPerIp: number; loginFailuresPerUser: number; loginFailuresPerIp: number; loginWindow: number };
+export type AuthLimits = {
+  registerPerIp: number;
+  loginFailuresPerPair: number;
+  loginFailuresPerIp: number;
+  loginFailuresPerUser: number;
+  loginWindow: number;
+};
 export type Blocked = { retryAt: number } | null;
 
 export const AUTH_LIMIT_SCHEMA = `
@@ -19,11 +27,17 @@ export const AUTH_LIMIT_SCHEMA = `
 `;
 
 const DAY = 24 * 3600;
-type Kind = "register" | "login_fail_user" | "login_fail_ip";
+type Kind = "register" | "login_pair" | "login_ip" | "login_user";
 
 export function createAuthLimit(deps: { db: DatabaseSync; limits: AuthLimits; now: () => number }) {
   const { db, limits, now } = deps;
   const userKey = (username: string) => username.trim().toLowerCase();
+  const keys = (ip: string, username: string) =>
+    [
+      ["login_pair", `${userKey(username)}|${ip}`, limits.loginFailuresPerPair],
+      ["login_ip", ip, limits.loginFailuresPerIp],
+      ["login_user", userKey(username), limits.loginFailuresPerUser],
+    ] as const;
 
   const record = (kind: Kind, key: string) =>
     db.prepare("INSERT INTO auth_attempts (kind, key, created_at) VALUES (?, ?, ?)").run(kind, key, now());
@@ -40,18 +54,24 @@ export function createAuthLimit(deps: { db: DatabaseSync; limits: AuthLimits; no
     registerBlocked: (ip: string) => check("register", ip, limits.registerPerIp, DAY),
     recordRegister: (ip: string) => void record("register", ip),
 
-    loginBlocked(ip: string, username: string): Blocked {
-      return (
-        check("login_fail_user", userKey(username), limits.loginFailuresPerUser, limits.loginWindow) ??
-        check("login_fail_ip", ip, limits.loginFailuresPerIp, limits.loginWindow)
-      );
+    /**
+     * Call before checking the password. Counts the attempt as a failure up front, synchronously with the check,
+     * so concurrent requests cannot all pass before the first failure is written; `loginSucceeded` takes it back.
+     */
+    startLogin(ip: string, username: string): Blocked {
+      for (const [kind, key, max] of keys(ip, username)) {
+        const blocked = check(kind, key, max, limits.loginWindow);
+        if (blocked) return blocked;
+      }
+      for (const [kind, key] of keys(ip, username)) record(kind, key);
+      return null;
     },
-    recordLoginFailure(ip: string, username: string) {
-      record("login_fail_user", userKey(username));
-      record("login_fail_ip", ip);
-    },
-    loginSucceeded(username: string) {
-      db.prepare("DELETE FROM auth_attempts WHERE kind = 'login_fail_user' AND key = ?").run(userKey(username));
+    loginSucceeded(ip: string, username: string) {
+      const [pair, ipRow, user] = keys(ip, username);
+      db.prepare("DELETE FROM auth_attempts WHERE kind = ? AND key = ?").run(pair[0], pair[1]);
+      // the attempt this sign-in recorded, not the IP's earlier failures
+      for (const [kind, key] of [ipRow, user])
+        db.prepare("DELETE FROM auth_attempts WHERE id = (SELECT MAX(id) FROM auth_attempts WHERE kind = ? AND key = ?)").run(kind, key);
     },
     /** Drops rows no window can see any more. */
     prune() {

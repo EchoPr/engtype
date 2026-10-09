@@ -105,10 +105,14 @@ export function locateIssues(text: string, issues: InlineIssueT[]): LocatedIssue
   return out.sort((a, b) => a.start - b.start);
 }
 
+const MAX_DIFF_CELLS = 10_000;
+
 /** Character-level diff for spelling errors: which letters of `a` are wrong / missing relative to `b`. */
 export function letterDiff(a: string, b: string): { ch: string; wrong: boolean }[] {
   const n = a.length;
   const m = b.length;
+  // the table is n×m: model output is untrusted, so oversized pairs just get the whole quote marked
+  if (n * m > MAX_DIFF_CELLS) return [...a].map((ch) => ({ ch, wrong: true }));
   const dp = Array.from({ length: n + 1 }, () => new Array<number>(m + 1).fill(0));
   for (let i = n - 1; i >= 0; i--)
     for (let j = m - 1; j >= 0; j--)

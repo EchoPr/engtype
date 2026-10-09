@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { DatabaseSync } from "node:sqlite";
 import { AUTH_LIMIT_SCHEMA, createAuthLimit } from "./auth-limit";
 
-const limits = { registerPerIp: 2, loginFailuresPerUser: 3, loginFailuresPerIp: 5, loginWindow: 900 };
+const limits = { registerPerIp: 2, loginFailuresPerPair: 3, loginFailuresPerIp: 5, loginFailuresPerUser: 8, loginWindow: 900 };
 const HOUR = 3600;
 
 let clock = 1_000_000;
@@ -14,6 +14,9 @@ beforeEach(() => {
   clock = 1_000_000;
   limit = createAuthLimit({ db, limits, now: () => clock });
 });
+
+/** A sign-in attempt whose password turns out wrong. */
+const fail = (ip: string, username: string) => limit.startLogin(ip, username);
 
 describe("registration", () => {
   it("allows a few accounts per IP a day, then refuses until the oldest leaves the window", () => {
@@ -28,31 +31,49 @@ describe("registration", () => {
 });
 
 describe("login", () => {
-  it("locks a username after repeated failures, whatever the IP and letter case", () => {
-    limit.recordLoginFailure("ip-1", "Alice");
-    limit.recordLoginFailure("ip-2", "alice");
-    limit.recordLoginFailure("ip-3", "ALICE");
-    expect(limit.loginBlocked("ip-4", "alice")).toEqual({ retryAt: 1_000_000 + 900 });
-    expect(limit.loginBlocked("ip-4", "bob")).toBeNull();
+  it("counts an attempt before the password is checked, so a burst cannot all slip through", () => {
+    const results = Array.from({ length: 10 }, () => limit.startLogin("ip-1", "alice"));
+    expect(results.filter((r) => r === null)).toHaveLength(3);
+  });
+
+  it("locks a username for the guessing IP, whatever the letter case", () => {
+    fail("ip-1", "Alice");
+    fail("ip-1", "alice");
+    fail("ip-1", "ALICE");
+    expect(limit.startLogin("ip-1", "alice")).toEqual({ retryAt: 1_000_000 + 900 });
+  });
+
+  it("does not lock the owner out when someone else guesses their password", () => {
+    for (let i = 0; i < 3; i++) fail("attacker", "alice");
+    expect(limit.startLogin("owner", "alice")).toBeNull();
+  });
+
+  it("still caps guesses on one username spread across many IPs", () => {
+    for (let i = 0; i < 8; i++) fail(`ip-${i}`, "alice");
+    expect(limit.startLogin("fresh-ip", "alice")).not.toBeNull();
   });
 
   it("locks an IP that guesses across many usernames", () => {
-    for (let i = 0; i < 5; i++) limit.recordLoginFailure("ip-1", `user${i}`);
-    expect(limit.loginBlocked("ip-1", "fresh")).not.toBeNull();
-    expect(limit.loginBlocked("ip-2", "fresh")).toBeNull();
+    for (let i = 0; i < 5; i++) fail("ip-1", `user${i}`);
+    expect(limit.startLogin("ip-1", "fresh")).not.toBeNull();
+    expect(limit.startLogin("ip-2", "fresh")).toBeNull();
   });
 
   it("forgets failures once they leave the window", () => {
-    for (let i = 0; i < 3; i++) limit.recordLoginFailure("ip-1", "alice");
+    for (let i = 0; i < 3; i++) fail("ip-1", "alice");
     clock += 901;
-    expect(limit.loginBlocked("ip-1", "alice")).toBeNull();
+    expect(limit.startLogin("ip-1", "alice")).toBeNull();
   });
 
-  it("clears a username's failures after a successful sign-in", () => {
-    limit.recordLoginFailure("ip-1", "alice");
-    limit.recordLoginFailure("ip-1", "alice");
-    limit.loginSucceeded("Alice");
-    limit.recordLoginFailure("ip-1", "alice");
-    expect(limit.loginBlocked("ip-1", "alice")).toBeNull();
+  it("a successful sign-in clears the pair and does not count against the IP", () => {
+    fail("ip-1", "alice");
+    fail("ip-1", "alice");
+    limit.startLogin("ip-1", "alice");
+    limit.loginSucceeded("ip-1", "Alice");
+    fail("ip-1", "alice");
+    expect(limit.startLogin("ip-1", "alice")).toBeNull();
+    // IP rows: 2 failures + 1 failure + 1 attempt = 4, the success is not counted; the cap is 5
+    expect(limit.startLogin("ip-1", "bob")).toBeNull();
+    expect(limit.startLogin("ip-1", "carol")).not.toBeNull();
   });
 });
