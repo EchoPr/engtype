@@ -1,8 +1,19 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { LockIcon } from "lucide-react";
 import { currentUser, userByName } from "@/lib/auth";
 import { userStats } from "@/lib/stats";
 import { ProfileView } from "@/components/profile-view";
+
+export async function generateMetadata({ params }: PageProps<"/u/[username]">): Promise<Metadata> {
+  const { username } = await params;
+  const user = userByName(decodeURIComponent(username));
+  if (!user || !user.profile_public) return { title: "Profile", robots: { index: false } };
+  const title = `${user.username} — writing profile`;
+  const description = user.bio.trim() || `${user.username}'s IELTS and TOEFL writing practice on engtype: activity, scores and public essays.`;
+  const url = `/u/${encodeURIComponent(user.username)}`;
+  return { title, description, alternates: { canonical: url }, openGraph: { type: "profile", url, title, description } };
+}
 
 export default async function PublicProfile({ params }: PageProps<"/u/[username]">) {
   const { username } = await params;

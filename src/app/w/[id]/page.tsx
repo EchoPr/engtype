@@ -1,4 +1,6 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { cache } from "react";
 import { db, now } from "@/lib/db";
 import { currentUser } from "@/lib/auth";
 import { chatHistory } from "@/lib/chat";
@@ -24,20 +26,42 @@ type Row = {
   profile_public: number;
 };
 
-export default async function SubmissionPage({ params }: PageProps<"/w/[id]">) {
-  const { id } = await params;
-  const user = await currentUser();
+const loadSubmission = cache((id: string) => {
   const row = db
     .prepare(
       `SELECT s.*, u.username, u.profile_public FROM submissions s JOIN users u ON u.id = s.user_id WHERE s.id = ?`,
     )
     .get(Number(id)) as Row | undefined;
-  if (!row) notFound();
-  const isOwner = user?.id === row.user_id;
-  // visitors only see essays explicitly made public on a public profile
-  if (!isOwner && !(row.is_public && row.profile_public)) notFound();
+  return row ? { row, task: db.prepare("SELECT * FROM tasks WHERE id = ?").get(row.task_id) as TaskRow } : null;
+});
 
-  const task = db.prepare("SELECT * FROM tasks WHERE id = ?").get(row.task_id) as TaskRow;
+// visitors only see essays explicitly made public on a public profile
+const isVisible = (row: Row) => Boolean(row.is_public && row.profile_public);
+
+export async function generateMetadata({ params }: PageProps<"/w/[id]">): Promise<Metadata> {
+  const { id } = await params;
+  const found = loadSubmission(id);
+  if (!found || !isVisible(found.row)) return { title: "Essay", robots: { index: false } };
+  const { row, task } = found;
+  const title = `${task.title} — essay by ${row.username}`;
+  const description = `${row.text.replace(/\s+/g, " ").slice(0, 150).trim()}…`;
+  return {
+    title,
+    description,
+    alternates: { canonical: `/w/${row.id}` },
+    openGraph: { type: "article", url: `/w/${row.id}`, title, description },
+  };
+}
+
+export default async function SubmissionPage({ params }: PageProps<"/w/[id]">) {
+  const { id } = await params;
+  const user = await currentUser();
+  const found = loadSubmission(id);
+  if (!found) notFound();
+  const { row, task } = found;
+  const isOwner = user?.id === row.user_id;
+  if (!isOwner && !isVisible(row)) notFound();
+
   const stored = row.feedback ? (JSON.parse(row.feedback) as StoredFeedback) : null;
   let fullReviewIn: string | null = null;
   if (isOwner && user) {
