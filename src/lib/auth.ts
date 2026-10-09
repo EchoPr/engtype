@@ -5,9 +5,16 @@ import { cache } from "react";
 import { db, now } from "./db";
 import { randomToken, sha256 } from "./secrets";
 import type { PlanName } from "./quota";
+import { createAuthLimit } from "./auth-limit";
 
 const COOKIE = "eng_session";
 const TTL = 60 * 60 * 24 * 30;
+
+export const authLimit = createAuthLimit({
+  db,
+  limits: { registerPerIp: 5, loginFailuresPerUser: 10, loginFailuresPerIp: 30, loginWindow: 15 * 60 },
+  now,
+});
 
 export type User = {
   id: number;

@@ -5,7 +5,7 @@ import { refresh, revalidatePath } from "next/cache";
 import { after } from "next/server";
 import { z } from "zod";
 import { db, now } from "@/lib/db";
-import { createSession, destroySession, requireUser } from "@/lib/auth";
+import { authLimit, createSession, destroySession, requireUser } from "@/lib/auth";
 import { hashPassword, verifyPassword } from "@/lib/secrets";
 import { aiErrorMessage } from "@/lib/ai";
 import { quota } from "@/lib/quota-server";
@@ -33,22 +33,34 @@ export async function register(_: FormState, form: FormData): Promise<FormState>
   const parsed = Credentials.safeParse(Object.fromEntries(form));
   if (!parsed.success) return { error: parsed.error.issues[0].message };
   const { username, password } = parsed.data;
+  const ip = await clientIp();
+  const blocked = authLimit.registerBlocked(ip);
+  if (blocked) return { error: `Too many new accounts from your network. Try again in ${inHours(blocked.retryAt, now())}.` };
   if (db.prepare("SELECT 1 FROM users WHERE username = ?").get(username)) return { error: "Username is taken" };
   const { id } = db
     .prepare("INSERT INTO users (username, password_hash, created_at) VALUES (?, ?, ?) RETURNING id")
     .get(username, await hashPassword(password), now()) as { id: number };
   db.prepare("INSERT INTO user_settings (user_id) VALUES (?)").run(id);
+  authLimit.recordRegister(ip);
   await createSession(id);
   redirect("/write");
 }
 
 export async function login(_: FormState, form: FormData): Promise<FormState> {
-  const username = String(form.get("username") ?? "").trim();
+  const username = String(form.get("username") ?? "").trim().slice(0, 64);
   const password = String(form.get("password") ?? "");
+  const ip = await clientIp();
+  const blocked = authLimit.loginBlocked(ip, username);
+  if (blocked) return { error: `Too many failed attempts. Try again in ${inHours(blocked.retryAt, now())}.` };
   const row = db.prepare("SELECT id, password_hash FROM users WHERE username = ?").get(username) as
     | { id: number; password_hash: string }
     | undefined;
-  if (!row || !(await verifyPassword(password, row.password_hash))) return { error: "Wrong username or password" };
+  if (!row || !(await verifyPassword(password, row.password_hash))) {
+    authLimit.recordLoginFailure(ip, username);
+    return { error: "Wrong username or password" };
+  }
+  authLimit.loginSucceeded(username);
+  authLimit.prune();
   await createSession(row.id);
   redirect("/write");
 }

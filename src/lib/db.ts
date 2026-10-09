@@ -4,6 +4,7 @@ import { mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { seedBank } from "./bank-seed";
 import { QUOTA_SCHEMA } from "./quota";
+import { AUTH_LIMIT_SCHEMA } from "./auth-limit";
 
 export const DATA_DIR = process.env.DATA_DIR ?? join(process.cwd(), "data");
 
@@ -103,6 +104,8 @@ const MIGRATIONS: string[] = [
   UPDATE user_settings SET openai_key_enc = NULL;
   ${QUOTA_SCHEMA}
   `,
+  // sign-up and sign-in limits against account farming and password guessing
+  AUTH_LIMIT_SCHEMA,
 ];
 
 function open() {
@@ -122,6 +125,11 @@ function open() {
     }
   }
   seedBank(db);
+  // analyses run in-process via after(), so any still pending at startup died with the previous process;
+  // as errors they show the free retry instead of polling forever
+  db.prepare("UPDATE submissions SET status = 'error', error = ? WHERE status = 'pending'").run(
+    "The review was interrupted by a server restart. Run it again, it's free.",
+  );
   return withPlainRows(db);
 }
 
