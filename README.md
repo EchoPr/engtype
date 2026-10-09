@@ -56,3 +56,7 @@ src/lib/              db, auth, ai, tasks, analyze, guardrails, chat, metrics, s
 src/app/              страницы и server actions (actions.ts)
 src/components/       writer, result-view, annotated-essay, review/chat panels, profile
 ```
+
+## Лицензия
+
+[GNU AGPL-3.0](LICENSE). Код можно свободно использовать, менять и запускать у себя. Если вы запускаете изменённую версию как сервис, доступный другим людям по сети, её исходный код тоже нужно открыть под AGPL.
