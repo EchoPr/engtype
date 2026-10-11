@@ -86,4 +86,6 @@ cp .env.example .env    # AI_API_KEY, SITE_DOMAIN, NEXT_SERVER_ACTIONS_ENCRYPTIO
 docker compose up -d --build
 ```
 
+Статистика посещений — Umami: панель на `stats.<SITE_DOMAIN>` (нужна DNS-запись A на тот же IP), трекер отдаётся с основного домена по пути `/_t/`, чтобы его реже резали блокировщики. Первый запуск: задать в `.env` `UMAMI_DB_PASSWORD` и `UMAMI_APP_SECRET`, поднять compose, войти в панель (`admin` / `umami`, сразу сменить пароль), добавить сайт, вписать его ID в `NEXT_PUBLIC_UMAMI_WEBSITE_ID` и пересобрать `app`: ID вшивается в сборку. Пока ID пуст, скрипт на страницы не попадает. База Umami в `scripts/backup.sh` не входит.
+
 Без своего домена подойдёт `<ip-через-дефисы>.sslip.io`, например `1-2-3-4.sslip.io`. Обновление: `scripts/deploy.sh [коммит]` — бэкап, checkout коммита из `main` (по умолчанию последнего), пересборка и проверка, что сайт отвечает. Его же вызывает джоба `deploy` в CI после ручного одобрения в environment `production`; ключ `DEPLOY_SSH_KEY` на сервере ограничен запуском только этого скрипта. Бэкап базы: `scripts/backup.sh` по cron, копии хранятся в `/var/backups/engtype` 14 дней.

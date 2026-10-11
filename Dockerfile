@@ -10,6 +10,8 @@ RUN pnpm install --frozen-lockfile
 FROM base AS build
 # keeps Server Action references valid across rebuilds (base64, 32 bytes)
 ARG NEXT_SERVER_ACTIONS_ENCRYPTION_KEY
+# inlined into the client bundle; empty leaves the analytics script out
+ARG NEXT_PUBLIC_UMAMI_WEBSITE_ID
 ENV NEXT_TELEMETRY_DISABLED=1 DATA_DIR=/tmp/build-data
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .

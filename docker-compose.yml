@@ -6,6 +6,7 @@ services:
       context: .
       args:
         NEXT_SERVER_ACTIONS_ENCRYPTION_KEY: ${NEXT_SERVER_ACTIONS_ENCRYPTION_KEY:-}
+        NEXT_PUBLIC_UMAMI_WEBSITE_ID: ${NEXT_PUBLIC_UMAMI_WEBSITE_ID:-}
     restart: unless-stopped
     env_file: .env
     environment:
@@ -22,6 +23,7 @@ services:
     restart: unless-stopped
     depends_on:
       - app
+      - umami
     environment:
       SITE_DOMAIN: ${SITE_DOMAIN}
     ports:
@@ -33,7 +35,37 @@ services:
       - caddy_data:/data
       - caddy_config:/config
 
+  # Visitor analytics: dashboard at stats.<SITE_DOMAIN>, tracker proxied through the main domain (see Caddyfile)
+  umami:
+    image: ghcr.io/umami-software/umami:3.4.0
+    restart: unless-stopped
+    init: true
+    depends_on:
+      umami-db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://umami:${UMAMI_DB_PASSWORD:?set UMAMI_DB_PASSWORD in .env}@umami-db:5432/umami
+      APP_SECRET: ${UMAMI_APP_SECRET:?set UMAMI_APP_SECRET in .env}
+    expose:
+      - "3000"
+
+  umami-db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: umami
+      POSTGRES_USER: umami
+      POSTGRES_PASSWORD: ${UMAMI_DB_PASSWORD:?set UMAMI_DB_PASSWORD in .env}
+    volumes:
+      - umamidb:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U umami -d umami"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
 volumes:
   appdata:
+  umamidb:
   caddy_data:
   caddy_config:

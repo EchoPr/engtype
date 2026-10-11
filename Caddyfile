@@ -9,5 +9,25 @@
 		Referrer-Policy "strict-origin-when-cross-origin"
 		-Server
 	}
-	reverse_proxy app:3000
+	# Umami tracker under a neutral first-party path, so ad blockers that match "umami" or third-party hosts let it
+	# through. The script posts to <its own dir>/api/send. Only these two paths are exposed, not the dashboard.
+	@stats path /_t/script.js /_t/api/send
+	handle @stats {
+		uri strip_prefix /_t
+		reverse_proxy umami:3000
+	}
+	handle {
+		reverse_proxy app:3000
+	}
+}
+
+stats.{$SITE_DOMAIN} {
+	encode zstd gzip
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+	reverse_proxy umami:3000
 }
