@@ -86,4 +86,4 @@ cp .env.example .env    # AI_API_KEY, SITE_DOMAIN, NEXT_SERVER_ACTIONS_ENCRYPTIO
 docker compose up -d --build
 ```
 
-Без своего домена подойдёт `<ip-через-дефисы>.sslip.io`, например `1-2-3-4.sslip.io`. Обновление: `git pull && docker compose up -d --build`. Бэкап базы: `scripts/backup.sh` по cron, копии хранятся в `/var/backups/engtype` 14 дней.
+Без своего домена подойдёт `<ip-через-дефисы>.sslip.io`, например `1-2-3-4.sslip.io`. Обновление: `scripts/deploy.sh [коммит]` — бэкап, checkout коммита из `main` (по умолчанию последнего), пересборка и проверка, что сайт отвечает. Его же вызывает джоба `deploy` в CI после ручного одобрения в environment `production`; ключ `DEPLOY_SSH_KEY` на сервере ограничен запуском только этого скрипта. Бэкап базы: `scripts/backup.sh` по cron, копии хранятся в `/var/backups/engtype` 14 дней.
