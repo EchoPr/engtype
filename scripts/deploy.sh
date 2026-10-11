@@ -23,6 +23,11 @@ SUFFIX="predeploy-$(date +%H%M%S)" "$(dirname "$0")/backup.sh"
 echo "==> deploying $(git log -1 --format='%h %s' "$commit")"
 git checkout -q --detach "$commit"
 docker compose up -d --build --remove-orphans
+# Caddyfile is a single-file bind mount: checkout writes a new inode and the running container keeps reading the old one
+if ! docker compose exec -T caddy cat /etc/caddy/Caddyfile | cmp -s - Caddyfile; then
+  echo "==> Caddyfile changed, recreating caddy"
+  docker compose up -d --no-deps --force-recreate caddy
+fi
 
 echo "==> health check"
 domain="$(grep -E '^SITE_DOMAIN=' .env | cut -d= -f2-)"
