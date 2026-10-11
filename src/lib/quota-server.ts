@@ -18,6 +18,8 @@ export const quota = createQuota({
     quickPerIp: int("QUOTA_QUICK_PER_IP", 40),
     globalFull: int("QUOTA_GLOBAL_FULL", 2000),
     globalQuick: int("QUOTA_GLOBAL_QUICK", 10000),
+    taskPerIp: int("QUOTA_TASK_PER_IP", 40),
+    globalTask: int("QUOTA_GLOBAL_TASK", 5000),
   },
   now,
 });
