@@ -60,21 +60,34 @@ function IssueMark({ issue, focus, order }: { issue: LocatedIssue; focus: Range 
       >
         {body}
       </HoverCardTrigger>
-      <HoverCardContent className="w-80 border border-text/10 bg-sub-alt p-4 shadow-2xl">
-        <div className="mb-3 flex items-center justify-between font-mono text-[11px]">
-          <span className={cn("rounded px-1.5 py-0.5", issue.severity === "error" ? "bg-text text-background" : "border border-sub/50 text-sub")}>
-            {KIND_LABEL[issue.kind] ?? issue.kind}
-          </span>
-          <span className="italic text-sub">{issue.severity === "error" ? "mistake" : "could be better"}</span>
-        </div>
-        <div className="mb-2 font-mono text-sm">
-          <span className="text-sub line-through decoration-sub/70">{issue.quote}</span>
-          <span className="mx-2 text-sub">→</span>
-          <span className="font-semibold text-text">{issue.replacement || "(remove)"}</span>
-        </div>
-        <p className="text-[15px] leading-snug text-text/80">{issue.explanation}</p>
-      </HoverCardContent>
+      <IssueHint issue={issue} />
     </HoverCard>
+  );
+}
+
+/** The hover card body for one Inline Issue; also used by the landing page demo. */
+export function IssueHint({
+  issue,
+  side,
+}: {
+  issue: Pick<LocatedIssue, "kind" | "severity" | "quote" | "replacement" | "explanation">;
+  side?: "top" | "bottom";
+}) {
+  return (
+    <HoverCardContent side={side} className="w-80 border border-text/10 bg-sub-alt p-4 shadow-2xl">
+      <div className="mb-3 flex items-center justify-between font-mono text-[11px]">
+        <span className={cn("rounded px-1.5 py-0.5", issue.severity === "error" ? "bg-text text-background" : "border border-sub/50 text-sub")}>
+          {KIND_LABEL[issue.kind] ?? issue.kind}
+        </span>
+        <span className="italic text-sub">{issue.severity === "error" ? "mistake" : "could be better"}</span>
+      </div>
+      <div className="mb-2 font-mono text-sm">
+        <span className="text-sub line-through decoration-sub/70">{issue.quote}</span>
+        <span className="mx-2 text-sub">→</span>
+        <span className="font-semibold text-text">{issue.replacement || "(remove)"}</span>
+      </div>
+      <p className="text-[15px] leading-snug text-text/80">{issue.explanation}</p>
+    </HoverCardContent>
   );
 }
 

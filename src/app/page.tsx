@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRightIcon } from "lucide-react";
 import { currentUser } from "@/lib/auth";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { LandingDemo } from "@/components/landing-demo";
 
 const TITLE = "engtype — тренажёр Writing для подготовки к IELTS и TOEFL";
 const DESCRIPTION =
@@ -62,7 +63,7 @@ const FAQ = [
   },
 ];
 
-/** A static example of the inline feedback, built with the same marks the app uses. */
+/** An example of the inline feedback with mock hints, built with the same marks and hover cards the app uses. */
 function Demo() {
   return (
     <div className="rounded-2xl bg-sub-alt p-6 font-mono text-[15px] leading-[2.2] text-text shadow-sm sm:p-8">
@@ -70,18 +71,11 @@ function Demo() {
         <span>ielts task 2 · discuss both views</span>
         <span>band · estimate 6.0</span>
       </div>
-      <p>
-        Many <span className="mark-error">peoples</span> believe that living in a city is{" "}
-        <span className="mark-improve">very good</span> because there are more jobs. However, the countryside offers a quieter life
-        and <span className="mark-error">a</span> cleaner air, which is important for families. In my opinion, the best choice
-        depends on age, <span>bec</span>
-        <span className="mark-letter">ua</span>
-        <span>se</span> young people usually need opportunities more than silence.
-      </p>
+      <LandingDemo />
       <div className="mt-5 grid gap-3 border-t border-sub/20 pt-4 font-sans text-sm sm:grid-cols-2">
         <p>
-          <span className="font-mono text-[11px] text-sub">grammar · </span>
-          <span className="text-sub line-through">peoples</span> → <b className="font-medium">people</b>: «people» уже множественное число.
+          <span className="font-mono text-[11px] text-sub">task response · 6 → 7: </span>
+          обе точки зрения есть, но вывод не отвечает прямо на вопрос задания.
         </p>
         <p>
           <span className="font-mono text-[11px] text-sub">coherence · 6 → 7: </span>
