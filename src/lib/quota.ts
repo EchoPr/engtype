@@ -9,7 +9,14 @@ export type PlanName = "free" | "pro";
 export type PlanLimits = { full: number; quick: number; task: number; chatPerResponse: number };
 export type Plans = Record<PlanName, PlanLimits>;
 /** Anti-abuse caps that apply across accounts. */
-export type AbuseCaps = { fullPerIp: number; quickPerIp: number; globalFull: number; globalQuick: number };
+export type AbuseCaps = {
+  fullPerIp: number;
+  quickPerIp: number;
+  globalFull: number;
+  globalQuick: number;
+  taskPerIp: number;
+  globalTask: number;
+};
 
 type Action = "full" | "quick" | "task" | "chat" | "retry";
 
@@ -91,8 +98,11 @@ export function createQuota(deps: { db: DatabaseSync; plans: Plans; abuse: Abuse
         if (ctx.ref == null) throw new Error("chat quota needs the Response id");
         if (countChat(learner.id, ctx.ref) >= limits.chatPerResponse) return { ok: false, reason: "quota", retryAt: null };
       } else {
+        if (ctx.ip == null) throw new Error("task quota needs the client IP");
         const used = countUser(learner.id, "task");
         if (used.n >= limits.task) return { ok: false, reason: "quota", retryAt: nextAt(used.oldest) };
+        if (countIp(ctx.ip, "task") >= abuse.taskPerIp) return { ok: false, reason: "ip", retryAt: null };
+        if (countGlobal("task") >= abuse.globalTask) return { ok: false, reason: "global", retryAt: null };
       }
       record(learner.id, action, ctx.ip, ctx.ref);
       return { ok: true };

@@ -6,7 +6,7 @@ const plans: Plans = {
   free: { full: 2, quick: 3, task: 2, chatPerResponse: 2 },
   pro: { full: 5, quick: 10, task: 10, chatPerResponse: 5 },
 };
-const abuse = { fullPerIp: 4, quickPerIp: 100, globalFull: 100, globalQuick: 1000 };
+const abuse = { fullPerIp: 4, quickPerIp: 100, globalFull: 100, globalQuick: 1000, taskPerIp: 3, globalTask: 100 };
 const HOUR = 3600;
 
 let clock = 1_000_000;
@@ -62,9 +62,26 @@ describe("reviews", () => {
 
 describe("tasks and chat", () => {
   it("limits generated Tasks per rolling day", () => {
-    expect(quota.consume(free(1), "task").ok).toBe(true);
-    expect(quota.consume(free(1), "task").ok).toBe(true);
-    expect(quota.consume(free(1), "task")).toMatchObject({ ok: false, reason: "quota" });
+    expect(quota.consume(free(1), "task", { ip: "ip" }).ok).toBe(true);
+    expect(quota.consume(free(1), "task", { ip: "ip" }).ok).toBe(true);
+    expect(quota.consume(free(1), "task", { ip: "ip" })).toMatchObject({ ok: false, reason: "quota" });
+  });
+
+  it("caps generated Tasks per IP across accounts", () => {
+    const results = [1, 1, 2, 2].map((id) => quota.consume(free(id), "task", { ip: "same-ip" }));
+    expect(results.map((r) => r.ok)).toEqual([true, true, true, false]);
+    expect(results[3]).toMatchObject({ reason: "ip" });
+    expect(quota.consume(free(2), "task", { ip: "other-ip" }).ok).toBe(true);
+  });
+
+  it("caps generated Tasks for the whole server per day", () => {
+    const q = createQuota({ db: (() => { const d = new DatabaseSync(":memory:"); d.exec(QUOTA_SCHEMA); return d; })(), plans, abuse: { ...abuse, globalTask: 1 }, now: () => clock });
+    expect(q.consume(free(1), "task", { ip: "a" }).ok).toBe(true);
+    expect(q.consume(free(2), "task", { ip: "b" })).toMatchObject({ ok: false, reason: "global" });
+  });
+
+  it("refuses to count a generated Task without the IP", () => {
+    expect(() => quota.consume(free(1), "task")).toThrow();
   });
 
   it("limits chat questions per Response, independently for each Response", () => {
