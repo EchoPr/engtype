@@ -1,0 +1,11 @@
+.git
+node_modules
+.next
+out
+coverage
+.env*
+!.env.example
+data/app.db*
+data/.secret
+data/anchors
+docs/evals

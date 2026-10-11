@@ -1,0 +1,39 @@
+# Production: the app plus Caddy (HTTPS, compression, X-Forwarded-For). Only Caddy is reachable from outside.
+# Configure in .env next to this file (see .env.example), then: docker compose up -d --build
+services:
+  app:
+    build:
+      context: .
+      args:
+        NEXT_SERVER_ACTIONS_ENCRYPTION_KEY: ${NEXT_SERVER_ACTIONS_ENCRYPTION_KEY:-}
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATA_DIR: /data
+      SITE_URL: https://${SITE_DOMAIN}
+      TRUSTED_PROXY_HOPS: "1"
+    volumes:
+      - appdata:/data
+    expose:
+      - "3000"
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      - app
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  appdata:
+  caddy_data:
+  caddy_config:

@@ -75,3 +75,15 @@ src/components/       writer, result-view, annotated-essay, review/chat panels, 
 ## Лицензия
 
 [GNU AGPL-3.0](LICENSE). Код можно свободно использовать, менять и запускать у себя. Если вы запускаете изменённую версию как сервис, доступный другим людям по сети, её исходный код тоже нужно открыть под AGPL.
+
+## Деплой на VPS
+
+Нужны Docker с compose plugin и открытые порты 80/443. Приложение работает за Caddy: тот сам получает HTTPS-сертификат и передаёт приложению настоящий IP клиента. Наружу опубликован только Caddy.
+
+```bash
+git clone https://github.com/EchoPr/engtype.git /opt/engtype && cd /opt/engtype
+cp .env.example .env    # AI_API_KEY, SITE_DOMAIN, NEXT_SERVER_ACTIONS_ENCRYPTION_KEY (openssl rand -base64 32)
+docker compose up -d --build
+```
+
+Без своего домена подойдёт `<ip-через-дефисы>.sslip.io`, например `1-2-3-4.sslip.io`. Обновление: `git pull && docker compose up -d --build`. Бэкап базы: `scripts/backup.sh` по cron, копии хранятся в `/var/backups/engtype` 14 дней.
