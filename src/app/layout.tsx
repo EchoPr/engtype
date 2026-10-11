@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Instrument_Serif, JetBrains_Mono, Newsreader } from "next/font/google";
 import { THEME_INIT_SCRIPT } from "@/lib/theme-script";
 import { SITE_URL } from "@/lib/site";
@@ -10,6 +11,8 @@ import "./globals.css";
 const serif = Newsreader({ variable: "--font-serif-app", subsets: ["latin"], axes: ["opsz"] });
 const display = Instrument_Serif({ variable: "--font-display-app", subsets: ["latin"], weight: "400", style: ["normal", "italic"] });
 const mono = JetBrains_Mono({ variable: "--font-mono-app", subsets: ["latin", "cyrillic"] });
+
+const UMAMI_WEBSITE_ID = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -38,6 +41,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           </div>
           <Toaster position="bottom-right" />
         </TooltipProvider>
+        {/* Umami, proxied by Caddy (see Caddyfile); off when no website ID was set at build */}
+        {UMAMI_WEBSITE_ID && <Script src="/_t/script.js" data-website-id={UMAMI_WEBSITE_ID} strategy="afterInteractive" />}
       </body>
     </html>
   );
