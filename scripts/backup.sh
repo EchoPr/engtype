@@ -8,7 +8,8 @@ KEEP_DAYS="${KEEP_DAYS:-14}"
 
 src="$(docker volume inspect -f '{{ .Mountpoint }}' "$VOLUME")/app.db"
 mkdir -p "$DEST" && chmod 700 "$DEST"
-out="$DEST/app-$(date +%F).db"
+# SUFFIX tells ad-hoc backups (e.g. before a deploy) apart from the nightly one of the same day
+out="$DEST/app-$(date +%F)${SUFFIX:+-$SUFFIX}.db"
 sqlite3 "$src" ".backup '$out'"
 gzip -f "$out"
 find "$DEST" -name 'app-*.db.gz' -mtime +"$KEEP_DAYS" -delete
